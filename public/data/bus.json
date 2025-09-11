@@ -19,12 +19,8 @@
     "contact": "",
     "licensePlate": "4",
     "shift": "บ่าย",
-    "departHour": "",
-    "departMin": "",
-    "arriveHour": "",
-    "arriveMin": "",
-    "trip": "2",
     "departTime": "08:52",
-    "arriveTime": "08:58"
+    "arriveTime": "08:58",
+    "trip": "0"
   }
 ]

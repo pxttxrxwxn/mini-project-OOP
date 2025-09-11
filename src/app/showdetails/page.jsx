@@ -3,27 +3,28 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BusSchedule, Driver } from "../../lib/classes";
 
 export default function ShowDetailsPage() {
-    const router = useRouter();
-  const [formData, setFormData] = useState({
-    carNumber: "",
-    driverName: "",
-    startStation: "",
-    endStation: "",
-    contact: "",
-    licensePlate: "",
-    shift: "",
-    trip: ""
-  });
-
+  const router = useRouter();
+  const [formData, setFormData] = useState(
+    new BusSchedule(
+      "",
+      "",
+      new Driver("", ""),
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    )
+  );
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value
-    }));
+    formData[field] = value;
+    setFormData({ ...formData });
   };
 
   const handleSubmit = async (e) => {
@@ -31,18 +32,29 @@ export default function ShowDetailsPage() {
     let newErrors = {};
 
     if (!formData.carNumber) newErrors.carNumber = "กรุณากรอกหมายเลขรถ";
-    if (!formData.driverName) newErrors.driverName = "กรุณากรอกชื่อคนขับ";
+    if (!formData.driver.name) newErrors.driverName = "กรุณากรอกชื่อคนขับ";
     if (!formData.startStation) newErrors.startStation = "กรุณากรอกสถานีต้นทาง";
     if (!formData.endStation) newErrors.endStation = "กรุณากรอกสถานีปลายทาง";
     if (!formData.shift) newErrors.shift = "กรุณาเลือกกะทำงาน";
-    if (!formData.departTime) newErrors.depart = "กรุณาเลือกเวลาออก";
-    if (!formData.arriveTime) newErrors.arrive = "กรุณาเลือกเวลาถึง";
+    if (!formData.departTime) newErrors.departTime = "กรุณาเลือกเวลาออก";
+    if (!formData.arriveTime) newErrors.arriveTime = "กรุณาเลือกเวลาถึง";
     if (!formData.trip) newErrors.trip = "กรุณากรอกเที่ยวที่";
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      const newSchedule = { ...formData };
+      const newSchedule = {
+        carNumber: formData.carNumber,
+        licensePlate: formData.licensePlate,
+        driverName: formData.driver.name,
+        contact: formData.driver.contact,
+        startStation: formData.startStation,
+        endStation: formData.endStation,
+        departTime: formData.departTime,
+        arriveTime: formData.arriveTime,
+        shift: formData.shift,
+        trip: formData.trip,
+      };
 
       await fetch("/api/bus", {
         method: "POST",
@@ -51,23 +63,10 @@ export default function ShowDetailsPage() {
       });
 
       alert("บันทึกข้อมูลเรียบร้อย!");
-      setFormData({
-        carNumber: "",
-        driverName: "",
-        startStation: "",
-        endStation: "",
-        contact: "",
-        licensePlate: "",
-        shift: "",
-        departTime: "",
-        arriveTime: "",
-        trip: ""
-      });
-      setErrors({});
+      setFormData(new BusSchedule("", "", new Driver("", ""), "", "", "", "", "", ""));
       router.push("/");
     }
   };
-
 
   return (
     <div className="min-h-screen">
@@ -85,10 +84,7 @@ export default function ShowDetailsPage() {
             </div>
 
       <div className="flex justify-center ml-[100px]">
-        <form
-            className="grid grid-cols-1 md:grid-cols-2 md:gap-5"
-            onSubmit={handleSubmit}
-        >
+        <form className="grid grid-cols-1 md:grid-cols-2 md:gap-5" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-3">
             <div>
                 <label className="block mb-1 text-xl font-semibold">หมายเลขรถ</label>

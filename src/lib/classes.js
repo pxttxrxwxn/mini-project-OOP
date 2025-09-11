@@ -72,12 +72,15 @@ export class BusSchedule extends Bus {
   }
 
   // Polymorphism - Overloading (simulate using optional params)
-  searchSchedule(field, value) {
+    searchSchedule(field, value) {
+    if (field === "name" && value) {
+        return this.driver.name.includes(value) ? this.driver.name : "";
+    }
     if (field && value) {
-      return `${field} matches ${value}`;
+        return `${field} matches ${value}`;
     }
     return this.displayBusInfo();
-  }
+    }
 }
 
 // Example Driver class

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { BusSchedule, Driver } from "../../lib/classes";
 
 export default function LookSchedules() {
   const [schedules, setSchedules] = useState([]);
@@ -8,24 +9,31 @@ export default function LookSchedules() {
 
   useEffect(() => {
     const fetchSchedules = async () => {
-      try {
-        const res = await fetch("/api/bus");
-        const data = await res.json();
-        setSchedules(data);
-      } catch (error) {
-        console.error("โหลดข้อมูลล้มเหลว:", error);
-      }
+      const res = await fetch("/api/bus");
+      const data = await res.json();
+
+      const busSchedules = data.map(
+        (item) =>
+          new BusSchedule(
+            item.carNumber,
+            item.licensePlate,
+            new Driver(item.driverName, item.contact, item.licensePlate),
+            item.startStation,
+            item.endStation,
+            item.departTime,
+            item.arriveTime,
+            item.shift,
+            item.trip
+          )
+      );
+      setSchedules(busSchedules);
     };
 
     fetchSchedules();
   }, []);
 
-
-  const filteredSchedules = schedules.filter(
-    (item) =>
-      item.carNumber.toLowerCase().includes(search.toLowerCase()) ||
-      item.licensePlate.toLowerCase().includes(search.toLowerCase()) ||
-      item.driverName.toLowerCase().includes(search.toLowerCase())
+  const filteredSchedules = schedules.filter((bus) =>
+    bus.searchSchedule("name", search).toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -37,15 +45,14 @@ export default function LookSchedules() {
         </h1>
       </div>
 
-      <div className="flex justify-end mt-5">
+      <div className="flex justify-end mt-5 mr-[70px]">
         <div className="relative flex justify-end mr-[70px]">
           <input
             type="search"
-            id="default-search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="block w-[450px] h-[50px] rounded-4xl px-[30px] pr-10 text-sm bg-white text-gray-900 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             placeholder="ค้นหาตารางเวลาการเดินรถเมย์"
+            className="block w-[450px] h-[50px] rounded-4xl px-[30px] pr-10 text-sm bg-white text-gray-900 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
           />
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
             <svg
@@ -82,7 +89,7 @@ export default function LookSchedules() {
                 <tr key={idx} className="text-[13px] bg-white">
                   <td className="border border-black px-2 py-1">{item.carNumber}</td>
                   <td className="border border-black px-2 py-1">{item.licensePlate}</td>
-                  <td className="border border-black px-2 py-1">{item.driverName}</td>
+                  <td className="border border-black px-2 py-1">{item.driver.name}</td>
                   <td className="border border-black px-2 py-1">{item.shift}</td>
                   <td className="border border-black px-2 py-1">{item.startStation}</td>
                   <td className="border border-black px-2 py-1">{item.departTime}</td>
@@ -95,7 +102,7 @@ export default function LookSchedules() {
           </table>
         </div>
       ) : (
-        <p className="text-center mt-10 text-gray-500 text-lg">ยังไม่มีตารางเวลารถเมย์</p>
+        <p className="text-center mt-10 text-gray-500 text-lg">ยังไม่มีตารางรถเมย์</p>
       )}
     </div>
   );
