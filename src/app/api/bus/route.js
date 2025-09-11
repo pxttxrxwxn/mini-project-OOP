@@ -44,3 +44,17 @@ export async function PUT(req) {
 
   return Response.json({ message: "แก้ไขข้อมูลสำเร็จ", data: updatedData });
 }
+
+export async function DELETE(req) {
+  const { index } = await req.json();
+  const busData = await readData();
+
+  if (index < 0 || index >= busData.length) {
+    return Response.json({ error: "ไม่พบข้อมูล" }, { status: 404 });
+  }
+
+  busData.splice(index, 1);
+  await writeData(busData);
+
+  return Response.json({ message: "ลบข้อมูลสำเร็จ" });
+}
