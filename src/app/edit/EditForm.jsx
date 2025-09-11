@@ -21,38 +21,22 @@ export default function EditForm() {
     arriveTime: "",
     trip: ""
   });
-  
+
   const [errors, setErrors] = useState({});
 
-  useEffect(() => {
+    useEffect(() => {
     if (index !== null) {
-      fetch("/api/bus")
-        .then((res) => res.json())
-        .then((data) => {
-          const item = data[parseInt(index)];
-          if (item) {
-            setFormData({
-              carNumber: item.carNumber,
-              driverName: item.driverName,
-              startStation: item.startStation,
-              endStation: item.endStation,
-              contact: item.contact,
-              licensePlate: item.licensePlate,
-              shift: item.shift,
-              departTime: item.departTime || "",
-              arriveTime: item.arriveTime || "",
-              trip: item.trip,
-            });
-          }
-        });
+        const data = JSON.parse(localStorage.getItem("busSchedules")) || [];
+        const item = data[parseInt(index)];
+        if (item) setFormData({ ...item });
     }
-  }, [index]);
+    }, [index]);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
     e.preventDefault();
 
     let newErrors = {};
@@ -66,24 +50,14 @@ export default function EditForm() {
       return;
     }
 
-    const updatedData = { ...formData };
-    await fetch("/api/bus", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ index: parseInt(index), updatedData }),
-    });
-
-
-    await fetch("/api/bus", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ index: parseInt(index), updatedData }),
-    });
+    const schedules = JSON.parse(localStorage.getItem("busSchedules")) || [];
+    schedules[parseInt(index)] = { ...formData };
+    localStorage.setItem("busSchedules", JSON.stringify(schedules));
 
     alert("บันทึกข้อมูลเรียบร้อย!");
     router.push("/");
-  };
-
+    };
+    
   return (
     <div className="min-h-screen">
       <div className="flex items-center min-w-screen">

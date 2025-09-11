@@ -8,28 +8,22 @@ export default function LookSchedules() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const fetchSchedules = async () => {
-      const res = await fetch("/api/bus");
-      const data = await res.json();
-
-      const busSchedules = data.map(
-        (item) =>
-          new BusSchedule(
-            item.carNumber,
-            item.licensePlate,
-            new Driver(item.driverName, item.contact, item.licensePlate),
-            item.startStation,
-            item.endStation,
-            item.departTime,
-            item.arriveTime,
-            item.shift,
-            item.trip
-          )
-      );
-      setSchedules(busSchedules);
-    };
-
-    fetchSchedules();
+    const data = JSON.parse(localStorage.getItem("busSchedules")) || [];
+    const busSchedules = data.map(
+      (item) =>
+        new BusSchedule(
+          item.carNumber,
+          item.licensePlate,
+          new Driver(item.driverName, item.contact, item.licensePlate),
+          item.startStation,
+          item.endStation,
+          item.departTime,
+          item.arriveTime,
+          item.shift,
+          item.trip
+        )
+    );
+    setSchedules(busSchedules);
   }, []);
 
   const filteredSchedules = schedules.filter((bus) =>

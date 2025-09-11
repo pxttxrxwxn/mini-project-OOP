@@ -42,43 +42,24 @@ export default function ShowDetailsPage() {
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      const newSchedule = {
-        carNumber: formData.carNumber,
-        licensePlate: formData.licensePlate,
-        driverName: formData.driverName,
-        contact: formData.contact,
-        startStation: formData.startStation,
-        endStation: formData.endStation,
-        departTime: formData.departTime,
-        arriveTime: formData.arriveTime,
-        shift: formData.shift,
-        trip: formData.trip,
-      };
-
-      await fetch("/api/bus", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newSchedule),
-      });
-
-      alert("บันทึกข้อมูลเรียบร้อย!");
-
-      setFormData({
-        carNumber: "",
-        licensePlate: "",
-        driverName: "",
-        contact: "",
-        startStation: "",
-        endStation: "",
-        departTime: "",
-        arriveTime: "",
-        shift: "",
-        trip: ""
-      });
-
-      router.push("/");
-    }
+    if (Object.keys(newErrors).length > 0) return;
+    const schedules = JSON.parse(localStorage.getItem("busSchedules")) || [];
+    schedules.push({ ...formData });
+    localStorage.setItem("busSchedules", JSON.stringify(schedules));
+    alert("บันทึกข้อมูลเรียบร้อย!");
+    setFormData({
+      carNumber: "",
+      licensePlate: "",
+      driverName: "",
+      contact: "",
+      startStation: "",
+      endStation: "",
+      departTime: "",
+      arriveTime: "",
+      shift: "",
+      trip: ""
+    });
+    router.push("/");
   };
 
   return (

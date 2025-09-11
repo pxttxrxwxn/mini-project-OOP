@@ -7,33 +7,19 @@ export default function Home() {
   const [schedules, setSchedules] = useState([]); 
   
   useEffect(() => {
-    fetchSchedules();
+    const data = JSON.parse(localStorage.getItem("busSchedules")) || [];
+    setSchedules(data);
   }, []);
 
-  const fetchSchedules = async () => {
-    try {
-      const res = await fetch("/api/bus");
-      const data = await res.json();
-      setSchedules(data);
-    } catch (error) {
-      console.error("โหลดข้อมูลล้มเหลว:", error);
-    }
-  };
-
-  const handleDelete = async (index) => {
+  const handleDelete = (index) => {
     if (!confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) return;
 
-    try {
-      await fetch("/api/bus", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ index }),
-      });
-      fetchSchedules();
-    } catch (error) {
-      console.error("ลบข้อมูลล้มเหลว:", error);
-    }
+    const schedules = JSON.parse(localStorage.getItem("busSchedules")) || [];
+    schedules.splice(index, 1);
+    localStorage.setItem("busSchedules", JSON.stringify(schedules));
+    setSchedules([...schedules]);
   };
+
 
   return (
     <div className="min-h-screen">
