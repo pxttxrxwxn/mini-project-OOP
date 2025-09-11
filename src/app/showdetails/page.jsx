@@ -7,24 +7,24 @@ import { BusSchedule, Driver } from "../../lib/classes";
 
 export default function ShowDetailsPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState(
-    new BusSchedule(
-      "",
-      "",
-      new Driver("", ""),
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    )
-  );
+
+  const [formData, setFormData] = useState({
+    carNumber: "",
+    licensePlate: "",
+    driverName: "",
+    contact: "",
+    startStation: "",
+    endStation: "",
+    departTime: "",
+    arriveTime: "",
+    shift: "",
+    trip: ""
+  });
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
-    formData[field] = value;
-    setFormData({ ...formData });
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -32,7 +32,7 @@ export default function ShowDetailsPage() {
     let newErrors = {};
 
     if (!formData.carNumber) newErrors.carNumber = "กรุณากรอกหมายเลขรถ";
-    if (!formData.driver.name) newErrors.driverName = "กรุณากรอกชื่อคนขับ";
+    if (!formData.driverName) newErrors.driverName = "กรุณากรอกชื่อคนขับ";
     if (!formData.startStation) newErrors.startStation = "กรุณากรอกสถานีต้นทาง";
     if (!formData.endStation) newErrors.endStation = "กรุณากรอกสถานีปลายทาง";
     if (!formData.shift) newErrors.shift = "กรุณาเลือกกะทำงาน";
@@ -46,8 +46,8 @@ export default function ShowDetailsPage() {
       const newSchedule = {
         carNumber: formData.carNumber,
         licensePlate: formData.licensePlate,
-        driverName: formData.driver.name,
-        contact: formData.driver.contact,
+        driverName: formData.driverName,
+        contact: formData.contact,
         startStation: formData.startStation,
         endStation: formData.endStation,
         departTime: formData.departTime,
@@ -63,7 +63,20 @@ export default function ShowDetailsPage() {
       });
 
       alert("บันทึกข้อมูลเรียบร้อย!");
-      setFormData(new BusSchedule("", "", new Driver("", ""), "", "", "", "", "", ""));
+
+      setFormData({
+        carNumber: "",
+        licensePlate: "",
+        driverName: "",
+        contact: "",
+        startStation: "",
+        endStation: "",
+        departTime: "",
+        arriveTime: "",
+        shift: "",
+        trip: ""
+      });
+
       router.push("/");
     }
   };
