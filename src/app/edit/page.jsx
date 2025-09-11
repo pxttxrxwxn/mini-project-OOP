@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function EditPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const index = searchParams.get("index"); // index ของ item ที่จะถูกแก้ไข
+  const index = searchParams.get("index");
 
   const [formData, setFormData] = useState({
     carNumber: "",
@@ -18,35 +18,35 @@ export default function EditPage() {
     contact: "",
     licensePlate: "",
     shift: "",
-    departHour: "",
-    departMin: "",
-    arriveHour: "",
-    arriveMin: "",
+    departTime: "",
+    arriveTime: "",
     trip: ""
   });
 
-  const [errors, setErrors] = useState({}); // ✅ เพิ่ม state errors
+
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (index !== null) {
-      const schedules = JSON.parse(localStorage.getItem("schedules") || "[]");
-      const item = schedules[parseInt(index)];
-      if (item) {
-        setFormData({
-          carNumber: item.carNumber,
-          driverName: item.driverName,
-          startStation: item.startStation,
-          endStation: item.endStation,
-          contact: item.contact,
-          licensePlate: item.licensePlate,
-          shift: item.shift,
-          departHour: item.departTime?.split(":")[0] || "",
-          departMin: item.departTime?.split(":")[1] || "",
-          arriveHour: item.arriveTime?.split(":")[0] || "",
-          arriveMin: item.arriveTime?.split(":")[1] || "",
-          trip: item.trip
+      fetch("/api/bus")
+        .then((res) => res.json())
+        .then((data) => {
+          const item = data[parseInt(index)];
+          if (item) {
+            setFormData({
+              carNumber: item.carNumber,
+              driverName: item.driverName,
+              startStation: item.startStation,
+              endStation: item.endStation,
+              contact: item.contact,
+              licensePlate: item.licensePlate,
+              shift: item.shift,
+              departTime: item.departTime || "",
+              arriveTime: item.arriveTime || "",
+              trip: item.trip,
+            });
+          }
         });
-      }
     }
   }, [index]);
 
@@ -54,10 +54,9 @@ export default function EditPage() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ validate เบื้องต้น
     let newErrors = {};
     if (!formData.carNumber) newErrors.carNumber = "กรุณากรอกหมายเลขรถ";
     if (!formData.driverName) newErrors.driverName = "กรุณากรอกชื่อคนขับ";
@@ -69,15 +68,22 @@ export default function EditPage() {
       return;
     }
 
-    const schedules = JSON.parse(localStorage.getItem("schedules") || "[]");
-    schedules[parseInt(index)] = {
-      ...formData,
-      departTime: `${formData.departHour}:${formData.departMin}`,
-      arriveTime: `${formData.arriveHour}:${formData.arriveMin}`
-    };
-    localStorage.setItem("schedules", JSON.stringify(schedules));
+    const updatedData = { ...formData };
+    await fetch("/api/bus", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ index: parseInt(index), updatedData }),
+    });
+
+
+    await fetch("/api/bus", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ index: parseInt(index), updatedData }),
+    });
+
     alert("บันทึกข้อมูลเรียบร้อย!");
-    router.push("/"); // กลับหน้าหลัก
+    router.push("/");
   };
 
   return (
@@ -91,7 +97,6 @@ export default function EditPage() {
 
       <div className="flex justify-center ml-[100px]">
         <form className="grid grid-cols-1 md:grid-cols-2 md:gap-5" onSubmit={handleSubmit}>
-          {/* Left Column */}
           <div className="flex flex-col gap-3">
             {["carNumber", "driverName", "startStation", "endStation", "contact"].map((field) => (
               <div key={field}>
@@ -124,9 +129,7 @@ export default function EditPage() {
             ))}
           </div>
 
-          {/* Right Column */}
           <div className="flex flex-col gap-3 ml-[100px]">
-            {/* License Plate */}
             <div>
               <label className="block text-xl font-semibold">หมายเลขทะเบียนรถ</label>
               <input
@@ -139,7 +142,6 @@ export default function EditPage() {
               {errors.licensePlate && <p className="text-red-500">{errors.licensePlate}</p>}
             </div>
 
-            {/* Shift */}
             <div>
               <label className="block text-xl font-semibold">กะทำงานของคนขับ</label>
               <div className="flex items-center gap-4 mt-1">
@@ -158,38 +160,34 @@ export default function EditPage() {
               {errors.shift && <p className="text-red-500">{errors.shift}</p>}
             </div>
 
-            {/* Depart & Arrive Time */}
-            {[
-              { label: "เวลาออก", hour: "departHour", min: "departMin" },
-              { label: "เวลาถึง", hour: "arriveHour", min: "arriveMin" }
-            ].map((time) => (
-              <div key={time.label}>
-                <label className="block text-xl font-semibold">{time.label}</label>
-                <div className="flex items-center ml-[30px]">
-                  <input
-                    type="text"
-                    className="w-[50px] h-[40px] border bg-white border-gray-300 rounded-md p-1 text-center text-2xl"
-                    placeholder="08"
-                    value={formData[time.hour]}
-                    onChange={(e) => handleChange(time.hour, e.target.value)}
-                  />
-                  <div className="text-[40px] font-bold">:</div>
-                  <input
-                    type="text"
-                    className="w-[50px] h-[40px] border bg-white border-gray-300 rounded-md p-1 text-center text-2xl"
-                    placeholder="00"
-                    value={formData[time.min]}
-                    onChange={(e) => handleChange(time.min, e.target.value)}
-                  />
-                  <div className="text-[25px] font-bold">น.</div>
-                </div>
-                {(errors[time.hour] || errors[time.min]) && (
-                  <p className="text-red-500">{errors[time.hour] || errors[time.min]}</p>
-                )}
+            <div>
+              <label className="block text-xl font-semibold">เวลาออก</label>
+              <div className="flex items-center ml-[30px]">
+                <input
+                  type="time"
+                  className="w-[150px] h-[40px] border bg-white border-gray-300 rounded-md p-2 text-2xl"
+                  value={formData.departTime || ""}
+                  onChange={(e) => handleChange("departTime", e.target.value)}
+                />
+                <div className="text-[25px] font-bold ml-2">น.</div>
               </div>
-            ))}
+              {errors.departTime && <p className="text-red-500">{errors.departTime}</p>}
+            </div>
 
-            {/* Trip */}
+            <div>
+              <label className="block text-xl font-semibold">เวลาถึง</label>
+              <div className="flex items-center ml-[30px]">
+                <input
+                  type="time"
+                  className="w-[150px] h-[40px] border bg-white border-gray-300 rounded-md p-2 text-2xl"
+                  value={formData.arriveTime || ""}
+                  onChange={(e) => handleChange("arriveTime", e.target.value)}
+                />
+                <div className="text-[25px] font-bold ml-2">น.</div>
+              </div>
+              {errors.arriveTime && <p className="text-red-500">{errors.arriveTime}</p>}
+            </div>
+
             <div>
               <label className="block text-xl font-semibold">เที่ยวที่</label>
               <input
@@ -203,7 +201,6 @@ export default function EditPage() {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="md:col-span-2 flex justify-end gap-5">
             <Link href="/">
               <button className="w-[130px] bg-[#C5C5C5] text-white px-6 py-3 rounded-4xl hover:bg-gray-500 transition">

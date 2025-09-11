@@ -7,11 +7,20 @@ export default function LookSchedules() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("schedules") || "[]");
-    setSchedules(stored);
+    const fetchSchedules = async () => {
+      try {
+        const res = await fetch("/api/bus");
+        const data = await res.json();
+        setSchedules(data);
+      } catch (error) {
+        console.error("โหลดข้อมูลล้มเหลว:", error);
+      }
+    };
+
+    fetchSchedules();
   }, []);
 
-  // ฟิลเตอร์ตามคำค้นหา (ค้นหา carNumber, licensePlate, driverName)
+
   const filteredSchedules = schedules.filter(
     (item) =>
       item.carNumber.toLowerCase().includes(search.toLowerCase()) ||

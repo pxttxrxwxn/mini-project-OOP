@@ -7,14 +7,32 @@ export default function Home() {
   const [schedules, setSchedules] = useState([]); 
   
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("schedules") || "[]");
-    setSchedules(stored);
+    fetchSchedules();
   }, []);
 
-  const handleDelete = (index) => {
-    const updated = schedules.filter((_, i) => i !== index);
-    setSchedules(updated);
-    localStorage.setItem("schedules", JSON.stringify(updated));
+  const fetchSchedules = async () => {
+    try {
+      const res = await fetch("/api/bus");
+      const data = await res.json();
+      setSchedules(data);
+    } catch (error) {
+      console.error("โหลดข้อมูลล้มเหลว:", error);
+    }
+  };
+
+  const handleDelete = async (index) => {
+    if (!confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) return;
+
+    try {
+      await fetch("/api/bus", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ index }),
+      });
+      fetchSchedules();
+    } catch (error) {
+      console.error("ลบข้อมูลล้มเหลว:", error);
+    }
   };
 
   return (
@@ -64,7 +82,6 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* แสดงตารางเฉพาะตอนที่มีข้อมูล */}
       {schedules.length > 0 && (
         <div className="overflow-x-auto flex justify-center mt-5">
           <table className="border-collapse w-[95%] text-center text-black">
