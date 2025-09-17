@@ -26,9 +26,15 @@ export default function LookSchedules() {
     setSchedules(busSchedules);
   }, []);
 
-  const filteredSchedules = schedules.filter((bus) =>
-    bus.searchSchedule("name", search).toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredSchedules = schedules.filter((bus) => {
+      return (
+          bus.searchSchedule("name", search).toLowerCase().includes(search.toLowerCase()) ||
+          bus.searchSchedule("startStation", search).toLowerCase().includes(search.toLowerCase()) ||
+          bus.searchSchedule("endStation", search).toLowerCase().includes(search.toLowerCase()) ||
+          bus.searchSchedule("departTime", search).toLowerCase().includes(search.toLowerCase()) ||
+          bus.searchSchedule("arriveTime", search).toLowerCase().includes(search.toLowerCase())
+      );
+  });
 
   return (
     <div className="min-h-screen">

@@ -72,15 +72,25 @@ export class BusSchedule extends Bus {
   }
 
   // Polymorphism - Overloading (simulate using optional params)
-    searchSchedule(field, value) {
-    if (field === "name" && value) {
-        return this.driver.name.includes(value) ? this.driver.name : "";
-    }
-    if (field && value) {
-        return `${field} matches ${value}`;
-    }
-    return this.displayBusInfo();
-    }
+  searchSchedule(field, value) {
+      if (!field || !value) return this.displayBusInfo();
+
+      // ตรวจสอบแต่ละฟิลด์
+      switch (field) {
+          case "name":
+              return this.driver.name.includes(value) ? this.driver.name : "";
+          case "startStation":
+              return this.startStation.includes(value) ? this.startStation : "";
+          case "endStation":
+              return this.endStation.includes(value) ? this.endStation : "";
+          case "departTime":
+              return this.departTime.includes(value) ? this.departTime : "";
+          case "arriveTime":
+              return this.arriveTime.includes(value) ? this.arriveTime : "";
+          default:
+              return ""; // ถ้า field ไม่ตรงกับที่กำหนด
+      }
+  }
 }
 
 // Example Driver class
