@@ -38,8 +38,14 @@ export default function EditForm() {
   }, [index]);
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: "" })); // clear error on change
+    if (field === "contact") {
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    }
+    setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
   const handleSubmit = (e) => {
@@ -50,11 +56,16 @@ export default function EditForm() {
     if (!formData.driverName) newErrors.driverName = "กรุณากรอกชื่อคนขับ";
     if (!formData.startStation) newErrors.startStation = "กรุณากรอกสถานีต้นทาง";
     if (!formData.endStation) newErrors.endStation = "กรุณากรอกสถานีปลายทาง";
+    if (formData.contact && formData.contact.length !== 10) {
+      newErrors.contact = "กรุณากรอกหมายเลขโทรศัพท์ 10 หลัก";
+    }
     if (!formData.licensePlate) newErrors.licensePlate = "กรุณากรอกหมายเลขทะเบียนรถ";
     if (!formData.shift) newErrors.shift = "กรุณาเลือกกะทำงาน";
     if (!formData.departTime) newErrors.departTime = "กรุณากรอกเวลาออก";
     if (!formData.arriveTime) newErrors.arriveTime = "กรุณากรอกเวลาถึง";
     if (!formData.trip) newErrors.trip = "กรุณากรอกเที่ยวที่";
+    
+    setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
