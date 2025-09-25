@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function Home() {
   const [schedules, setSchedules] = useState([]); 
@@ -12,14 +13,30 @@ export default function Home() {
   }, []);
 
   const handleDelete = (index) => {
-    if (!confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) return;
+    Swal.fire({
+      title: "คุณต้องการลบข้อมูลในตารางนี้?",
+      text: "ข้อมูลที่ลบจะไม่สามารถกู้คืนได้",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const schedules = JSON.parse(localStorage.getItem("busSchedules")) || [];
+        schedules.splice(index, 1);
+        localStorage.setItem("busSchedules", JSON.stringify(schedules));
+        setSchedules([...schedules]);
 
-    const schedules = JSON.parse(localStorage.getItem("busSchedules")) || [];
-    schedules.splice(index, 1);
-    localStorage.setItem("busSchedules", JSON.stringify(schedules));
-    setSchedules([...schedules]);
+        Swal.fire({
+          title: "ลบข้อมูลเรียบร้อย!",
+          text: "ข้อมูลในตารางนี้ถูกลบแล้วและไม่สามารถกู้คืนได้",
+          icon: "success"
+        });
+      }
+    });
   };
-
 
   return (
     <div className="min-h-screen">
@@ -97,16 +114,18 @@ export default function Home() {
                   <td className="border border-black px-2 py-1">{item.endStation}</td>
                   <td className="border border-black px-2 py-1">{item.arriveTime}</td>
                   <td className="border border-black px-2 py-1">{item.trip}</td>
-                  <td className="flex justify-center items-center border border-black px-2 py-1 cursor-pointer">
-                    <Link href={`/edit?index=${idx}`}>
-                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#B5B3B3">
-                        <path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z"/>
-                      </svg>
-                    </Link>
-                    <div className="px-2 py-1 cursor-pointer" onClick={() => handleDelete(idx)}>
-                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#de3c3c">
-                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-                      </svg>
+                  <td className=" border-black border px-2 py-1 cursor-pointer">
+                    <div className="flex justify-center items-center">
+                      <Link href={`/edit?index=${idx}`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#B5B3B3">
+                          <path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z"/>
+                        </svg>
+                      </Link>
+                      <div className="px-2 py-1 cursor-pointer" onClick={() => handleDelete(idx)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#de3c3c">
+                          <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                        </svg>
+                      </div>
                     </div>
                   </td>
                 </tr>
