@@ -12,11 +12,9 @@ export default function LookSchedules() {
     const busSchedules = data.map(
       (item) =>
         new BusSchedule(
-          item.driverName,       
-          item.contact,          
-          item.licenseNumber,   
-          item.carNumber,       
+          item.carNumber,
           item.licensePlate,
+          new Driver(item.driverName, item.contact, item.licensePlate),
           item.startStation,
           item.endStation,
           item.departTime,
@@ -91,7 +89,7 @@ export default function LookSchedules() {
                 <tr key={idx} className="text-[13px] bg-white">
                   <td className="border border-black px-2 py-1">{item.carNumber}</td>
                   <td className="border border-black px-2 py-1">{item.licensePlate}</td>
-                  <td className="border border-black px-2 py-1">{item.name}</td>
+                  <td className="border border-black px-2 py-1">{item.driver.name}</td>
                   <td className="border border-black px-2 py-1">{item.shift}</td>
                   <td className="border border-black px-2 py-1">{item.startStation}</td>
                   <td className="border border-black px-2 py-1">{item.departTime}</td>
