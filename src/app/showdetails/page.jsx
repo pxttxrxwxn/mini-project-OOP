@@ -36,6 +36,12 @@ export default function ShowDetailsPage() {
     if (!formData.driverName) newErrors.driverName = "กรุณากรอกชื่อคนขับ";
     if (!formData.startStation) newErrors.startStation = "กรุณากรอกสถานีต้นทาง";
     if (!formData.endStation) newErrors.endStation = "กรุณากรอกสถานีปลายทาง";
+    if (formData.contact) {
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(formData.contact)) {
+        newErrors.contact = "กรุณากรอกหมายเลขโทรศัพท์ 10 หลัก";
+      }
+    }
     if (!formData.shift) newErrors.shift = "กรุณาเลือกกะทำงาน";
     if (!formData.departTime) newErrors.departTime = "กรุณาเลือกเวลาออก";
     if (!formData.arriveTime) newErrors.arriveTime = "กรุณาเลือกเวลาถึง";
@@ -142,7 +148,12 @@ export default function ShowDetailsPage() {
                 className="w-full md:w-[300px] h-[40px] ml-[30px] bg-white border border-gray-400 rounded-md p-2"
                 placeholder="0123456789"
                 value={formData.contact}
-                onChange={(e) => handleChange("contact", e.target.value)}
+                onChange={(e) => { 
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value) && value.length <= 10) {
+                    handleChange("contact", value);
+                  }
+                }}
                 />
                 {errors.contact && <p className="text-red-500">{errors.contact}</p>}
             </div>
@@ -182,29 +193,29 @@ export default function ShowDetailsPage() {
             <div>
               <label className="block text-xl font-semibold">เวลาออก</label>
               <div className="flex items-center ml-[30px]">
-              <input
-                type="time"
-                className="w-[150px] h-[40px] border bg-white border-gray-300 rounded-md p-2 text-2xl"
-                value={formData.departTime || ""}
-                onChange={(e) => handleChange("departTime", e.target.value)}
-              />
+                <input
+                  type="time"
+                  className="w-[150px] h-[40px] border bg-white border-gray-300 rounded-md p-2 text-2xl"
+                  value={formData.departTime || ""}
+                  onChange={(e) => handleChange("departTime", e.target.value)}
+                />
                 <div className="text-[25px] font-bold ml-2">น.</div>
               </div>
-              {errors.depart && <p className="text-red-500">{errors.depart}</p>}
+              {errors.departTime && <p className="text-red-500">{errors.departTime}</p>}
             </div>
 
             <div>
               <label className="block text-xl font-semibold">เวลาถึง</label>
               <div className="flex items-center ml-[30px]">
-              <input
-                type="time"
-                className="w-[150px] h-[40px] border bg-white border-gray-300 rounded-md p-2 text-2xl"
-                value={formData.arriveTime || ""}
-                onChange={(e) => handleChange("arriveTime", e.target.value)}
-              />
+                <input
+                  type="time"
+                  className="w-[150px] h-[40px] border bg-white border-gray-300 rounded-md p-2 text-2xl"
+                  value={formData.arriveTime || ""}
+                  onChange={(e) => handleChange("arriveTime", e.target.value)}
+                />
                 <div className="text-[25px] font-bold ml-2">น.</div>
               </div>
-              {errors.arrive && <p className="text-red-500">{errors.arrive}</p>}
+              {errors.arriveTime && <p className="text-red-500">{errors.arriveTime}</p>}
             </div>
 
                 <div>
