@@ -22,15 +22,27 @@ export class Person {
   }
 }
 
-// Encapsulation: Bus class
-export class Bus {
+// Level 1 Inheritance
+export class Driver extends Person {
+  constructor(name, contact, licenseNumber) {
+    super(name, contact);
+    this.licenseNumber = licenseNumber;
+  }
+
+  getRole() {
+    return "Driver";
+  }
+}
+
+// Level 2 Inheritance
+export class Bus extends Driver {
   #carNumber;
   #licensePlate;
-  #driver; // instance of Person
-  constructor(carNumber, licensePlate, driver) {
+
+  constructor(name, contact, licenseNumber, carNumber, licensePlate) {
+    super(name, contact, licenseNumber); // Driver properties
     this.#carNumber = carNumber;
     this.#licensePlate = licensePlate;
-    this.#driver = driver;
   }
 
   get carNumber() {
@@ -41,23 +53,27 @@ export class Bus {
     return this.#licensePlate;
   }
 
-  get driver() {
-    return this.#driver;
-  }
-
-  set driver(newDriver) {
-    this.#driver = newDriver;
-  }
-
   displayBusInfo() {
-    return `${this.#carNumber} - ${this.#licensePlate} (Driver: ${this.#driver.name})`;
+    return `${this.#carNumber} - ${this.#licensePlate} (Driver: ${this.name})`;
   }
 }
 
-// Inheritance: BusSchedule extends Bus
+// Level 3 Inheritance
 export class BusSchedule extends Bus {
-  constructor(carNumber, licensePlate, driver, startStation, endStation, departTime, arriveTime, shift, trip) {
-    super(carNumber, licensePlate, driver);
+  constructor(
+    name,
+    contact,
+    licenseNumber,
+    carNumber,
+    licensePlate,
+    startStation,
+    endStation,
+    departTime,
+    arriveTime,
+    shift,
+    trip
+  ) {
+    super(name, contact, licenseNumber, carNumber, licensePlate);
     this.startStation = startStation;
     this.endStation = endStation;
     this.departTime = departTime;
@@ -66,41 +82,28 @@ export class BusSchedule extends Bus {
     this.trip = trip;
   }
 
-  // Polymorphism - Overriding displayBusInfo
+  // Polymorphism - Overriding
   displayBusInfo() {
     return `${super.displayBusInfo()} | ${this.startStation} -> ${this.endStation} [${this.departTime}-${this.arriveTime}] Shift: ${this.shift} Trip: ${this.trip}`;
   }
 
-  // Polymorphism - Overloading (simulate using optional params)
+  // Polymorphism - Overloading (simulate with optional params)
   searchSchedule(field, value) {
-      if (!field || !value) return this.displayBusInfo();
+    if (!field || !value) return this.displayBusInfo();
 
-      // ตรวจสอบแต่ละฟิลด์
-      switch (field) {
-          case "name":
-              return this.driver.name.includes(value) ? this.driver.name : "";
-          case "startStation":
-              return this.startStation.includes(value) ? this.startStation : "";
-          case "endStation":
-              return this.endStation.includes(value) ? this.endStation : "";
-          case "departTime":
-              return this.departTime.includes(value) ? this.departTime : "";
-          case "arriveTime":
-              return this.arriveTime.includes(value) ? this.arriveTime : "";
-          default:
-              return ""; // ถ้า field ไม่ตรงกับที่กำหนด
-      }
-  }
-}
-
-// Example Driver class
-export class Driver extends Person {
-  constructor(name, contact, licenseNumber) {
-    super(name, contact);
-    this.licenseNumber = licenseNumber;
-  }
-
-  getRole() {
-    return "Driver";
+    switch (field) {
+      case "name":
+        return this.name.includes(value) ? this.name : "";
+      case "startStation":
+        return this.startStation.includes(value) ? this.startStation : "";
+      case "endStation":
+        return this.endStation.includes(value) ? this.endStation : "";
+      case "departTime":
+        return this.departTime.includes(value) ? this.departTime : "";
+      case "arriveTime":
+        return this.arriveTime.includes(value) ? this.arriveTime : "";
+      default:
+        return "";
+    }
   }
 }
