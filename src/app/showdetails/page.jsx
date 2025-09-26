@@ -42,6 +42,7 @@ export default function ShowDetailsPage() {
         newErrors.contact = "กรุณากรอกหมายเลขโทรศัพท์ 10 หลัก";
       }
     }
+    if (!formData.licensePlate) newErrors.licensePlate = "กรุณากรอกหมายเลขทะเบียนรถ";
     if (!formData.shift) newErrors.shift = "กรุณาเลือกกะทำงาน";
     if (!formData.departTime) newErrors.departTime = "กรุณาเลือกเวลาออก";
     if (!formData.arriveTime) newErrors.arriveTime = "กรุณาเลือกเวลาถึง";
