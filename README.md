@@ -29,17 +29,17 @@
 
 
 src/
- └── app/
-     ├── edit/        # หน้าแก้ไขตารางเวลารถเมย์
-     │   ├── EditForm.jsx
-     │   └── page.jsx
-     ├── look/        # หน้าแสดงและค้นหาตารางเวลา
-     │   └── page.jsx
-     ├── showdetail/  # หน้าเพิ่มตารางเวลาใหม่
-     │   └── page.jsx
-     ├── globals.css  # global style
-     ├── layout.js    # layout หลักของ Next.js
-     └── page.jsx     # หน้า Home (แสดง, ลบ, เข้าสู่หน้าอื่น)
+└── app/
+├── edit/ # หน้าแก้ไขตารางเวลารถเมย์
+│ ├── EditForm.jsx
+│ └── page.jsx
+├── look/ # หน้าแสดงและค้นหาตารางเวลา
+│ └── page.jsx
+├── showdetail/ # หน้าเพิ่มตารางเวลาใหม่
+│ └── page.jsx
+├── globals.css # global style
+├── layout.js # layout หลักของ Next.js
+└── page.jsx # หน้า Home (แสดง, ลบ, เข้าสู่หน้าอื่น)
 
 
 ---
@@ -93,46 +93,46 @@ src/
 ## 📌 UML Class Diagram
 
 +--------------------+
-|   <<abstract>>     |
-|       Person       |
+| <<abstract>> |
+| Person |
 +--------------------+
-| - _name: string    |
+| - _name: string |
 | - _contact: string |
 +--------------------+
-| + name: string     |
-| + contact: string  |
+| + name: string |
+| + contact: string |
 | + getRole():string |
 +--------------------+
-           ^
-           |
+^
+|
 +---------------------------+
-|          Driver           |
+| Driver |
 +---------------------------+
-| - licenseNumber: string   |
+| - licenseNumber: string |
 +---------------------------+
-| + licenseNumber: string   |
-| + getRole(): string       |
+| + licenseNumber: string |
+| + getRole(): string |
 +---------------------------+
-           ^
-           |
+^
+|
 +-------------------------------------+
-|            BusSchedule              |
+| BusSchedule |
 +-------------------------------------+
-| - busId: string                     |
-| - carNumber: string                 |
-| - routeStart: string                |
-| - routeEnd: string                  |
-| - departTime: string                |
-| - arriveTime: string                |
+| - busId: string |
+| - carNumber: string |
+| - routeStart: string |
+| - routeEnd: string |
+| - departTime: string |
+| - arriveTime: string |
 +-------------------------------------+
-| + busId: string                     |
-| + carNumber: string                 |
-| + routeStart: string                |
-| + routeEnd: string                  |
-| + departTime: string                |
-| + arriveTime: string                |
-| + searchSchedule(field,val):string  |
-| + toString(): string                |
+| + busId: string |
+| + carNumber: string |
+| + routeStart: string |
+| + routeEnd: string |
+| + departTime: string |
+| + arriveTime: string |
+| + searchSchedule(field,val):string |
+| + toString(): string |
 +-------------------------------------+
 
 ---
