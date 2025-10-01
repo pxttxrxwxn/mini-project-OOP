@@ -27,18 +27,18 @@
 
 ## 📌 โครงสร้างโปรเจกต์
 
-src/
-└── 📂 app/
-├── 📂 edit/ # หน้าแก้ไขตารางเวลารถเมย์
-│ ├── 📄 EditForm.jsx
-│ └── 📄 page.jsx
-├── 📂 look/ # หน้าแสดงและค้นหาตารางเวลา
-│ └── 📄 page.jsx
-├── 📂 showdetail/ # หน้าเพิ่มตารางเวลาใหม่
-│ └── 📄 page.jsx
-├── 📄 globals.css # global style
-├── 📄 layout.js # layout หลักของ Next.js
-└── 📄 page.jsx # หน้า Home (แสดง, ลบ, เข้าสู่หน้าอื่น)
+- src/
+- └── 📂 app/
+- ├── 📂 edit/ # หน้าแก้ไขตารางเวลารถเมย์
+- │ ├── 📄 EditForm.jsx
+- │ └── 📄 page.jsx
+- ├── 📂 look/ # หน้าแสดงและค้นหาตารางเวลา
+- │ └── 📄 page.jsx
+- ├── 📂 showdetail/ # หน้าเพิ่มตารางเวลาใหม่
+- │ └── 📄 page.jsx
+- ├── 📄 globals.css # global style
+- ├── 📄 layout.js # layout หลักของ Next.js
+- └── 📄 page.jsx # หน้า Home (แสดง, ลบ, เข้าสู่หน้าอื่น)
 
 ---
 
