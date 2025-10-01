@@ -90,48 +90,48 @@
 
 ## 📌 UML Class Diagram
 
-+--------------------+
-| <<abstract>> |
-| Person |
-+--------------------+
-| - _name: string |
-| - _contact: string |
-+--------------------+
-| + name: string |
-| + contact: string |
-| + getRole():string |
-+--------------------+
-^
-|
-+---------------------------+
-| Driver |
-+---------------------------+
-| - licenseNumber: string |
-+---------------------------+
-| + licenseNumber: string |
-| + getRole(): string |
-+---------------------------+
-^
-|
-+-------------------------------------+
-| BusSchedule |
-+-------------------------------------+
-| - busId: string |
-| - carNumber: string |
-| - routeStart: string |
-| - routeEnd: string |
-| - departTime: string |
-| - arriveTime: string |
-+-------------------------------------+
-| + busId: string |
-| + carNumber: string |
-| + routeStart: string |
-| + routeEnd: string |
-| + departTime: string |
-| + arriveTime: string |
-| + searchSchedule(field,val):string |
-| + toString(): string |
-+-------------------------------------+
+-         +--------------------+
+-         |   <<abstract>>     |
+-         |       Person       |
+-         +--------------------+
+-         | - _name: string    |
+-         | - _contact: string |
+-         +--------------------+
+-         | + name: string     |
+-         | + contact: string  |
+-         | + getRole():string |  
+-         +--------------------+
+-                   ^
+-                   |
+-      +---------------------------+
+-      |          Driver           |
+-      +---------------------------+
+-      | - licenseNumber: string   |
+-      +---------------------------+
+-      | + licenseNumber: string   |
+-      | + getRole(): string       |
+-      +---------------------------+    
+-                    ^
+-                    |
+- +-------------------------------------+
+- |            BusSchedule              |
+- +-------------------------------------+
+- | - busId: string                     |
+- | - carNumber: string                 |
+- | - routeStart: string                |
+- | - routeEnd: string                  |
+- | - departTime: string                |
+- | - arriveTime: string                |
+- +-------------------------------------+
+- | + busId: string                     |
+- | + carNumber: string                 |
+- | + routeStart: string                |
+- | + routeEnd: string                  |
+- | + departTime: string                |
+- | + arriveTime: string                |
+- | + searchSchedule(field,val):string  |
+- | + toString(): string                |
+- +-------------------------------------+
 
 ---
 
