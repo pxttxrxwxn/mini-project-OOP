@@ -166,9 +166,9 @@ https://mini-project-oop.vercel.app/
 ---
 
 ## Contact
-**หากมีคำถาม สามารถติดต่อผู้ดูแลโปรเจคคนที่1ได้ที่:**
--   อีเมล: naysasatadur5555@gmail.com
--   GitHub: [https://github.com/pxttxrxwxn](https://github.com/pxttxrxwxn)
-**หากมีคำถาม สามารถติดต่อผู้ดูแลโปรเจคคนที่2ได้ที่:**
--  อีเมล: 67023008@up.ac.th
--  GitHub: [https://github.com/Pookpikkkkk](https://github.com/Pookpikkkkk)
+### หากมีคำถาม สามารถติดต่อผู้ดูแลโปรเจคคนที่1ได้ที่:
+  -  อีเมล: naysasatadur5555@gmail.com
+  -  GitHub: [https://github.com/pxttxrxwxn](https://github.com/pxttxrxwxn)
+### หากมีคำถาม สามารถติดต่อผู้ดูแลโปรเจคคนที่2ได้ที่:
+  -  อีเมล: 67023008@up.ac.th
+  -  GitHub: [https://github.com/Pookpikkkkk](https://github.com/Pookpikkkkk)
