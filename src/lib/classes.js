@@ -24,9 +24,9 @@ export class Person {
 
 // Level 1 Inheritance
 export class Driver extends Person {
-  constructor(name, contact, licenseNumber) {
+  constructor(name, contact, licensePlate) {
     super(name, contact);
-    this.licenseNumber = licenseNumber;
+    this.licensePlate = licensePlate;
   }
 
   getRole() {
@@ -37,24 +37,18 @@ export class Driver extends Person {
 // Level 2 Inheritance
 export class Bus extends Driver {
   #carNumber;
-  #licensePlate;
 
-  constructor(name, contact, licenseNumber, carNumber, licensePlate) {
-    super(name, contact, licenseNumber); // Driver properties
+  constructor(name, contact, licensePlate, carNumber) {
+    super(name, contact, licensePlate); // Driver properties
     this.#carNumber = carNumber;
-    this.#licensePlate = licensePlate;
   }
 
   get carNumber() {
     return this.#carNumber;
   }
 
-  get licensePlate() {
-    return this.#licensePlate;
-  }
-
   displayBusInfo() {
-    return `${this.#carNumber} - ${this.#licensePlate} (Driver: ${this.name})`;
+    return `${this.#carNumber} - ${this.licensePlate} (Driver: ${this.name})`;
   }
 }
 
@@ -63,7 +57,6 @@ export class BusSchedule extends Bus {
   constructor(
     name,
     contact,
-    licenseNumber,
     carNumber,
     licensePlate,
     startStation,
@@ -73,7 +66,7 @@ export class BusSchedule extends Bus {
     shift,
     trip
   ) {
-    super(name, contact, licenseNumber, carNumber, licensePlate);
+    super(name, contact, carNumber, licensePlate);
     this.startStation = startStation;
     this.endStation = endStation;
     this.departTime = departTime;

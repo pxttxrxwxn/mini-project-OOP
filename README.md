@@ -90,49 +90,7 @@
 
 ## 📌 UML Class Diagram
 
-- +--------------------+
-- |   <<abstract>>     |
-- |       Person       |
-- +--------------------+
-- | - _name: string    |
-- | - _contact: string |
-- +--------------------+
-- | + name: string     |
-- | + contact: string  |
-- | + getRole():string |
-- +--------------------+
--            ^
--            |
-- +---------------------------+
-- |          Driver           |
-- +---------------------------+
-- | - licenseNumber: string   |
-- +---------------------------+
-- | + licenseNumber: string   |
-- | + getRole(): string       |
-- +---------------------------+
--            ^
--            |
-- +-------------------------------------+
-- |            BusSchedule              |
-- +-------------------------------------+
-- | - busId: string                     |
-- | - carNumber: string                 |
-- | - routeStart: string                |
-- | - routeEnd: string                  |
-- | - departTime: string                |
-- | - arriveTime: string                |
-- +-------------------------------------+
-- | + busId: string                     |
-- | + carNumber: string                 |
-- | + routeStart: string                |
-- | + routeEnd: string                  |
-- | + departTime: string                |
-- | + arriveTime: string                |
-- | + searchSchedule(field,val):string  |
-- | + toString(): string                |
-- +-------------------------------------+
-
+<img src="/public/552968735_4032723166977269_531263957304230902_n.png" alt="หน้า Home ของ BUSTRACK" width="500"/>
 ---
 
 ## 📌 คำอธิบายคลาส

@@ -13,8 +13,7 @@ export default function LookSchedules() {
       (item) =>
         new BusSchedule(
           item.driverName,       
-          item.contact,          
-          item.licenseNumber,   
+          item.contact,            
           item.carNumber,       
           item.licensePlate,
           item.startStation,
